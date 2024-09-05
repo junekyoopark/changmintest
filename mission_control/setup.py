@@ -16,7 +16,9 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name), glob('launch/*launch.[pxy][yma]*')),
         (os.path.join('share', package_name), glob('resource/*rviz')),
-        (os.path.join('share', package_name), ['resource/test_clothoid_result.csv'])
+        (os.path.join('share', package_name), ['resource/test_clothoid_result.csv']),
+        (os.path.join('share', package_name), ['resource/clothoidal_path_3d.csv']),
+
     ],
     install_requires=['setuptools'],
     zip_safe=True,

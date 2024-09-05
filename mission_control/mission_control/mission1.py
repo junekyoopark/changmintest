@@ -115,7 +115,7 @@ class MissionOne(Node):
     
     def get_csv_file_path(self):
         package_share_directory = get_package_share_directory('mission_control')
-        csv_file_path = os.path.join(package_share_directory, 'test_clothoid_result.csv')
+        csv_file_path = os.path.join(package_share_directory, 'clothoidal_path_3d.csv')
         return csv_file_path
 
     def csv_to_mem(self, csv_file_path):
@@ -123,13 +123,13 @@ class MissionOne(Node):
             csv_reader = list(csv.reader(file))
         return csv_reader
     
-    def way_data(self, data, col, curr_height):
+    def way_data(self, data, col):
         if col < len(data):
             row = data[col]
-            if len(row) >= 2:
+            if len(row) >= 3:
                 x = round(float(row[0]), 2)
                 y = round(float(row[1]), 2)
-                z = curr_height
+                z = round(float(row[2]), 2)
                 return {'x': x, 'y': y, 'z': z}
         return None
     
@@ -168,10 +168,10 @@ class MissionOne(Node):
     def navigate_waypoint_callback(self):
         # m_target = big target
         if self.s_waypoint_ind < self.max_s_waypoint:
-            self.curr_height = self.m_target['z']
-            if self.actual_height != self.curr_height:
-                adjustment = 0.05 if self.actual_height < self.curr_height else -0.05
-                self.actual_height = round(self.actual_height + adjustment, 2)
+            # self.curr_height = self.m_target['z']
+            # if self.actual_height != self.curr_height:
+            #     adjustment = 0.05 if self.actual_height < self.curr_height else -0.05
+            #     self.actual_height = round(self.actual_height + adjustment, 2)
 
 
             self.m_target = self.waypoints[self.curr_way_index]
@@ -186,7 +186,7 @@ class MissionOne(Node):
                     self.position_publisher.publish(pose)
 
             elif self.curr_way_index != 0:
-                target = self.way_data(self.csv_data, self.s_waypoint_ind, self.actual_height)
+                target = self.way_data(self.csv_data, self.s_waypoint_ind)
                 if self.s_is_waypoint_reached(target):
                     if self.is_waypoint_reached(self.m_target):
                         self.curr_way_index += 1
